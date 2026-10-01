@@ -3,60 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
-    
+    <title>Web System Activity 1</title>
+    <link rel="icon" type="image/png" href="img/favicon.png">
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+    <link rel="stylesheet" href="main.css">
 </head>
 <body>
-    <div class="main">
-        <div class="mainContainer"></div>
-        <div class="panel">
-            <img src="img/Illustration24 - Edited.png" alt="AI Hoshino" class="panelImage">
-            <h1 class="name">
-                A<br>
-                I<br>
-                H<br>
-                O<br>
-                S<br>
-                H<br>
-                I<br>
-                N<br>
-                O
-            </h1>
-
+    <p class="disclaimer">Fan-made class project, non-commercial. Song, lyrics and artwork belong to their respective owners.</p>
+    <nav class="nav">
+        <img class="nav-banner" src="img/banner.png" alt="アイドル">
+        <button class="nav-btn" id="lwOpen" aria-label="Open lyrics" aria-haspopup="dialog" aria-expanded="false">
+            <img src="img/menu-icon.png" alt="">
+        </button>
+    </nav>
+    <div class="main">  
+        <div class="stage">
+            <img src="img/Illustration.jpg" alt="mainBg" class="mainBg">
+            <canvas class="viz" id="viz" aria-hidden="true"></canvas>
         </div>
-        <div class="musicDetails">
-            <div class="musicDetailsInner">
-                <div class="musicDataHeader">
-                    <h6 class="topIdol">Top Idol</h6>
-                    <hr class="line">
-                    <h6 class="characterName"><span class="nameHighLight">AI</span> HOSHINO <span class="dot">•</span> 星野アイ</h6>
-                </div>
 
-                <div class="animeInfo">
-                    <div class="left">        
-                        <h5 class="animeName">OSHI</h5>
-                        <h5 class="animeNameDown">NO KO</h5>
-                    </div>
+        <div class="player">
+            <div class="ring" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24"><path d="M9 3v11.6A3.5 3.5 0 1 0 11 18V7.5l8-1.8V12a3.5 3.5 0 1 0 2 3.2V2z"/></svg>
+            </div>
 
-                    <div class="right">
-                        <h2 class="animeNameJp">【推しの子】</h2>
-                    </div>
-                </div>
+            <button class="play" id="playBtn" aria-label="Play">
+                <svg width="24" height="24" viewBox="0 0 24 24"><path id="playIcon" d="M5 3v18l16-9z"/></svg>
+            </button>
 
-                <div class="musicTitle">
-                    <h1 class="musicTitleText">IDOL</h1> <!-- before content: アイドル -->
-                    <h3 class="singers"><span class="ayase">AYASE</span> <span class="triangles">•••••</span> <span class="singerName">IKUTA</span></h3>
-                    <h2 class="musicBand">YOASOBI</h2>
+            <div class="info">
+                <div class="title">アイドル / YOASOBI</div>
+                <div class="bar" id="bar" role="slider" tabindex="0" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                    <div class="track"></div>
+                    <div class="fill"></div>
+                    <div class="knob"></div>
                 </div>
             </div>
 
+            <svg class="star" viewBox="0 0 48 48" aria-hidden="true">
+                <path d="M24 4l5.6 12.7 13.8 1.3-10.4 9.2 3.1 13.5L24 33.6 11.9 40.7 15 27.2 4.6 18l13.8-1.3z"/>
+                <circle cx="24" cy="23" r="4"/>
+            </svg>
         </div>
-        <img src="img/Illustration24 - Edited.png" alt="AI Hoshino" class="mainImage">
+
+        <div class="lyrics" id="lyrics" aria-live="off">
+            <p class="jp" id="lyricJp"></p>
+            <p class="romaji" id="lyricRomaji"></p>
+        </div>
+
+        <div class="lyric-tip" id="lyricTip" role="note">&#8597; Drag up / down to move</div>
+        <button class="lyric-reset" id="lyricReset" type="button">Reset position</button>
+        <button class="lyric-reset player-reset" id="playerReset" type="button">Reset position</button>
+
+        <audio id="audio" src="music/YOASOBI-IDOL.mp3" preload="metadata"></audio>
     </div>
 
+    <div class="lw-overlay" id="lwOverlay" hidden>
+        <div class="lw" id="lw" role="dialog" aria-modal="true" aria-labelledby="lwTitle">
+            <div class="lw-frame" id="lwFrame"></div>
+            <header class="lw-head" id="lwHead">
+                <svg class="lw-bunny" viewBox="0 0 48 52" aria-hidden="true">
+                    <path d="M16 22C12 10 12 3 17 3c4 0 6 8 6 17M32 22c4-12 4-19-1-19-4 0-6 8-6 17"/>
+                    <ellipse cx="24" cy="35" rx="15" ry="13"/>
+                    <circle cx="19" cy="33" r="1.2"/><circle cx="29" cy="33" r="1.2"/><path d="M22 38l2 2 2-2"/>
+                </svg>
+                <div class="lw-titles">
+                    <h2 id="lwTitle">Lyrics Window</h2>
+                    <p>YOASOBI / アイドル</p>
+                </div>
+                <div class="lw-note">嘘は<br>とびきりの愛なんだよ ♥</div>
+                <div class="lw-ctrl">
+                    <button id="lwMin" aria-label="Close lyrics">&#8211;</button>
+                    <button id="lwMax" aria-label="Enlarge lyrics window">&#9633;</button>
+                    <button id="lwClose" aria-label="Close lyrics">&#10005;</button>
+                </div>
+            </header>
+            <hr class="lw-hr">
+            <div class="lw-bar">
+                <button class="lw-play" id="lwPlay" aria-label="Play">
+                    <svg width="20" height="20" viewBox="0 0 24 24"><path id="lwPlayIcon" d="M5 3v18l16-9z"/></svg>
+                </button>
+                <span class="lw-now">アイドル / YOASOBI</span>
+            </div>
+            <div class="lw-panel" id="lwPanel">
+                <div class="lw-scroll" id="lwScroll"><div class="lw-cols" id="lwCols"></div></div>
+            </div>
+            <svg class="lw-star a" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4l5.6 12.7 13.8 1.3-10.4 9.2 3.1 13.5L24 33.6 11.9 40.7 15 27.2 4.6 18l13.8-1.3z"/></svg>
+            <svg class="lw-star b" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4l5.6 12.7 13.8 1.3-10.4 9.2 3.1 13.5L24 33.6 11.9 40.7 15 27.2 4.6 18l13.8-1.3z"/></svg>
+            <svg class="lw-star c" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4l5.6 12.7 13.8 1.3-10.4 9.2 3.1 13.5L24 33.6 11.9 40.7 15 27.2 4.6 18l13.8-1.3z"/></svg>
+        </div>
+    </div>
 
-
-    <script src="script.js"></script>
+    <script src="lyrics.js"></script>
+    <script src="player.js"></script>
 </body>
 </html>
